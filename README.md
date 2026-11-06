@@ -25,7 +25,7 @@ An end-to-end interactive data science application built with **Streamlit**, **P
 - **Domain Anomaly Correction**:
   - Corrects negative sales and quantities to valid absolute values.
   - Fixes erroneous discounts $> 100\%$ (e.g., $1.75 \rightarrow 0.175$).
-  - Caps extreme quantity outliers ($> 50$) and sales outliers ($> \$50,000$).
+  - Caps extreme quantity outliers ($> 50$) and sales outliers ($> ₹50,000$).
 - **Date Format Handling & Temporal Engineering**:
   - Parses mixed datetime formats (e.g., `YYYY-MM-DD` and `DD/MM/YYYY`) using `pd.to_datetime(format='mixed')`.
   - Drops invalid corrupt date tokens (e.g., `'not-a-date'`).
@@ -52,7 +52,7 @@ Created using **Plotly** with responsive layouts, tooltips, and themes:
 2. **Category Performance**: Grouped horizontal bar chart comparing Sales vs Profit.
 3. **Sub-Category Breakdown**: Stacked bar chart showing sales contributions with category tags.
 4. **Regional Revenue & Profit Margin**: Bar chart overlaying profit margin % onto total sales.
-5. **Transaction Matrix (Sales vs Profit)**: Scatter bubble chart sized by Quantity, colored by Category, with a Breakeven ($0 Profit) reference line.
+5. **Transaction Matrix (Sales vs Profit)**: Scatter bubble chart sized by Quantity, colored by Category, with a Breakeven (₹0 Profit) reference line.
 6. **Customer Segment Donut**: Donut chart displaying revenue share across customer segments.
 7. **Shipping Duration Distribution**: Box plot of delivery times across shipping modes.
 

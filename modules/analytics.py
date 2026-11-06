@@ -8,6 +8,23 @@ import numpy as np
 import pandas as pd
 
 
+
+def format_inr(value: float) -> str:
+    """Format a number as rupees with Indian digit grouping (12,34,567.89)."""
+    sign = "-" if value < 0 else ""
+    whole, frac = f"{abs(value):.2f}".split(".")
+    if len(whole) > 3:
+        head, tail = whole[:-3], whole[-3:]
+        groups = []
+        while len(head) > 2:
+            groups.insert(0, head[-2:])
+            head = head[:-2]
+        if head:
+            groups.insert(0, head)
+        whole = ",".join(groups + [tail])
+    return f"{sign}₹{whole}.{frac}"
+
+
 def calculate_kpis(df: pd.DataFrame) -> Dict[str, Any]:
     """
     Calculate the 5 core dynamically updating KPIs:
@@ -33,8 +50,8 @@ def calculate_kpis(df: pd.DataFrame) -> Dict[str, Any]:
             "profit_margin_pct": 0.0,
             "avg_order_value": 0.0,
             "avg_discount_pct": 0.0,
-            "sales_formatted": "$0.00",
-            "profit_formatted": "$0.00",
+            "sales_formatted": "₹0.00",
+            "profit_formatted": "₹0.00",
             "orders_formatted": "0",
             "quantity_formatted": "0",
             "margin_formatted": "0.00%",
@@ -69,12 +86,12 @@ def calculate_kpis(df: pd.DataFrame) -> Dict[str, Any]:
         "avg_order_value": avg_order_value,
         "avg_discount_pct": avg_discount_pct,
         # Formatted presentation strings
-        "sales_formatted": f"${total_sales:,.2f}",
-        "profit_formatted": f"${total_profit:,.2f}",
+        "sales_formatted": format_inr(total_sales),
+        "profit_formatted": format_inr(total_profit),
         "orders_formatted": f"{total_orders:,}",
         "quantity_formatted": f"{total_quantity:,}",
         "margin_formatted": f"{profit_margin_pct:.2f}%",
-        "aov_formatted": f"${avg_order_value:,.2f}",
+        "aov_formatted": format_inr(avg_order_value),
         "discount_formatted": f"{avg_discount_pct:.1f}%",
     }
 

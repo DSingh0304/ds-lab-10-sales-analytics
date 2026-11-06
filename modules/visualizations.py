@@ -76,7 +76,7 @@ def plot_sales_profit_trend(df: pd.DataFrame, freq: str = "Month") -> go.Figure:
         go.Bar(
             x=trend["Period"], y=trend["Total_Sales"], name="Sales",
             marker_color=COLOR_PRIMARY,
-            hovertemplate="%{x|%b %Y}<br>Sales: $%{y:,.0f}<extra></extra>",
+            hovertemplate="%{x|%b %Y}<br>Sales: ₹%{y:,.0f}<extra></extra>",
         ),
         row=1, col=1,
     )
@@ -86,14 +86,14 @@ def plot_sales_profit_trend(df: pd.DataFrame, freq: str = "Month") -> go.Figure:
                 x=trend["Period"], y=trend["Total_Profit"], name="Profit",
                 mode="lines+markers", line=dict(color=COLOR_PALETTE[2], width=2),
                 marker=dict(size=7, line=dict(color="#ffffff", width=2)),
-                hovertemplate="%{x|%b %Y}<br>Profit: $%{y:,.0f}<extra></extra>",
+                hovertemplate="%{x|%b %Y}<br>Profit: ₹%{y:,.0f}<extra></extra>",
             ),
             row=2, col=1,
         )
         fig.add_hline(y=0, line_width=1, line_color=INK_SOFT, row=2, col=1)
 
     _style(fig, f"Sales and profit by {freq.lower()}", height=480, legend=False)
-    fig.update_yaxes(tickprefix="$", tickformat="~s")
+    fig.update_yaxes(tickprefix="₹", tickformat="~s")
     fig.update_annotations(font=dict(size=12, color=INK_SOFT), xanchor="left", x=0)
     return fig
 
@@ -112,17 +112,17 @@ def plot_category_performance(df: pd.DataFrame) -> go.Figure:
     fig.add_trace(go.Bar(
         y=cat_perf["Category"], x=cat_perf["Total_Sales"], name="Sales", orientation="h",
         marker_color=COLOR_PRIMARY,
-        hovertemplate="<b>%{y}</b><br>Sales: $%{x:,.0f}<extra></extra>",
+        hovertemplate="<b>%{y}</b><br>Sales: ₹%{x:,.0f}<extra></extra>",
     ))
     if "Profit" in df.columns:
         fig.add_trace(go.Bar(
             y=cat_perf["Category"], x=cat_perf["Total_Profit"], name="Profit", orientation="h",
             marker_color=COLOR_PALETTE[1],
-            hovertemplate="<b>%{y}</b><br>Profit: $%{x:,.0f}<extra></extra>",
+            hovertemplate="<b>%{y}</b><br>Profit: ₹%{x:,.0f}<extra></extra>",
         ))
     _style(fig, "Sales and profit by category")
     fig.update_layout(barmode="group", bargap=0.3)
-    fig.update_xaxes(tickprefix="$", tickformat="~s", showgrid=True, gridcolor=GRID)
+    fig.update_xaxes(tickprefix="₹", tickformat="~s", showgrid=True, gridcolor=GRID)
     fig.update_yaxes(showgrid=False)
     return fig
 
@@ -140,11 +140,11 @@ def plot_sub_category_breakdown(df: pd.DataFrame) -> go.Figure:
     fig = px.bar(
         sub_perf, y="Sub-Category", x="Sales", color="Category", orientation="h",
         color_discrete_sequence=COLOR_PALETTE,
-        hover_data={"Sales": ":$,.0f", **({"Profit": ":$,.0f"} if "Profit" in sub_perf else {})},
+        hover_data={"Sales": ":₹,.0f", **({"Profit": ":₹,.0f"} if "Profit" in sub_perf else {})},
     )
     _style(fig, "Sales by sub-category", height=max(380, 24 * len(sub_perf) + 110))
     fig.update_layout(bargap=0.3)
-    fig.update_xaxes(tickprefix="$", tickformat="~s", showgrid=True, gridcolor=GRID, title="")
+    fig.update_xaxes(tickprefix="₹", tickformat="~s", showgrid=True, gridcolor=GRID, title="")
     fig.update_yaxes(showgrid=False, title="")
     return fig
 
@@ -165,10 +165,10 @@ def plot_regional_performance(df: pd.DataFrame) -> go.Figure:
         reg["Margin"] = (reg["Profit"] / reg["Sales"].replace(0, np.nan) * 100).fillna(0)
         labels = [f"{m:.1f}% margin" for m in reg["Margin"]]
         custom = np.stack([reg["Profit"], reg["Margin"]], axis=-1)
-        hover = "<b>%{x}</b><br>Sales: $%{y:,.0f}<br>Profit: $%{customdata[0]:,.0f}<br>Margin: %{customdata[1]:.1f}%<extra></extra>"
+        hover = "<b>%{x}</b><br>Sales: ₹%{y:,.0f}<br>Profit: ₹%{customdata[0]:,.0f}<br>Margin: %{customdata[1]:.1f}%<extra></extra>"
     else:
         labels, custom = None, None
-        hover = "<b>%{x}</b><br>Sales: $%{y:,.0f}<extra></extra>"
+        hover = "<b>%{x}</b><br>Sales: ₹%{y:,.0f}<extra></extra>"
 
     fig = go.Figure(go.Bar(
         x=reg["Region"], y=reg["Sales"], marker_color=COLOR_PRIMARY,
@@ -177,7 +177,7 @@ def plot_regional_performance(df: pd.DataFrame) -> go.Figure:
         customdata=custom, hovertemplate=hover,
     ))
     _style(fig, "Sales by region, labelled with profit margin", legend=False)
-    fig.update_yaxes(tickprefix="$", tickformat="~s")
+    fig.update_yaxes(tickprefix="₹", tickformat="~s")
     return fig
 
 
@@ -205,8 +205,8 @@ def plot_sales_vs_profit_scatter(df: pd.DataFrame) -> go.Figure:
         annotation_font=dict(color=COLOR_NEGATIVE, size=11),
     )
     _style(fig, "Sales against profit per transaction (bubble size is quantity)", height=420)
-    fig.update_xaxes(title="Sales", tickprefix="$", tickformat="~s")
-    fig.update_yaxes(title="Profit", tickprefix="$", tickformat="~s")
+    fig.update_xaxes(title="Sales", tickprefix="₹", tickformat="~s")
+    fig.update_yaxes(title="Profit", tickprefix="₹", tickformat="~s")
     return fig
 
 
@@ -220,7 +220,7 @@ def plot_segment_donut(df: pd.DataFrame) -> go.Figure:
         labels=seg["Segment"], values=seg["Sales"], hole=0.6, sort=False,
         marker=dict(colors=COLOR_PALETTE[: len(seg)], line=dict(color="#ffffff", width=2)),
         textinfo="percent", textfont=dict(color="#ffffff", size=12),
-        hovertemplate="<b>%{label}</b><br>Sales: $%{value:,.0f}<br>Share: %{percent}<extra></extra>",
+        hovertemplate="<b>%{label}</b><br>Sales: ₹%{value:,.0f}<br>Share: %{percent}<extra></extra>",
     ))
     _style(fig, "Revenue share by customer segment")
     fig.update_layout(legend=dict(orientation="h", y=-0.02, x=0.5, xanchor="center", yanchor="top"))
