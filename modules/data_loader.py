@@ -132,3 +132,4 @@ def validate_raw_data(df: pd.DataFrame) -> Dict[str, Any]:
         "validation_table": validation_table,
         "is_valid": num_rows > 0 and num_cols > 0,
     }
+

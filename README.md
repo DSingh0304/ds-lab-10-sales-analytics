@@ -138,3 +138,4 @@ All 8 modular test suites pass cleanly:
 - `test_statistical_summaries` ✅
 - `test_filtering_and_dynamic_kpis` ✅
 - `test_visualizations` ✅
+

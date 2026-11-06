@@ -220,3 +220,4 @@ def test_visualizations(sample_raw_data: pd.DataFrame):
 
     f7 = plot_shipping_duration_box(df_clean)
     assert f7 is not None
+
